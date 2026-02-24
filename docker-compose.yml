@@ -1,0 +1,28 @@
+version: '3.8'
+
+services:
+  market-gateway:
+    build: .
+    ports:
+      - "8080:8080"
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+    volumes:
+      - ./logs:/app/logs
+    restart: unless-stopped
+    
+  # Opcional: Base de datos para persistencia de usuarios
+  postgres:
+    image: postgres:15
+    environment:
+      POSTGRES_DB: marketdb
+      POSTGRES_USER: marketuser
+      POSTGRES_PASSWORD: marketpass
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    restart: unless-stopped
+
+volumes:
+  postgres_data:
